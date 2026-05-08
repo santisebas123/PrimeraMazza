@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primera Mazza — Catering</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --cream: #F5F0E8;
+    --dark: #1A1A14;
+    --olive: #3D4A2A;
+    --gold: #C8A96E;
+    --light-gold: #EDD99A;
+    --warm-white: #FAF8F3;
+    --text-muted: #6B6558;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,248,243,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(200,169,110,0.2);
+    padding: 1.1rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--olive);
+    letter-spacing: 0.01em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem; font-weight: 400; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--olive); }
+  .nav-cta {
+    background: var(--olive); color: var(--cream) !important;
+    padding: 0.5rem 1.2rem; border-radius: 2px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--dark) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--olive);
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding-top: 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 60px,
+      rgba(255,255,255,0.012) 60px,
+      rgba(255,255,255,0.012) 61px
+    );
+  }
+  .hero-text {
+    padding: 4rem 3rem 4rem 5rem;
+    position: relative; z-index: 1;
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 700; line-height: 1.07;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--light-gold);
+  }
+  .hero-subtitle {
+    font-size: 1rem; font-weight: 300; line-height: 1.75;
+    color: rgba(245,240,232,0.72);
+    max-width: 36ch; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--dark);
+    padding: 0.85rem 2rem; border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--light-gold); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--cream);
+    padding: 0.85rem 2rem; border: 1px solid rgba(245,240,232,0.35);
+    border-radius: 2px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 400;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(200,169,110,0.1); }
+  .hero-visual {
+    padding: 4rem 5rem 4rem 2rem;
+    display: flex; justify-content: center; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .hero-card-stack { position: relative; width: 300px; height: 360px; }
+  .h-card {
+    position: absolute;
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 4px;
+    padding: 1.5rem;
+    backdrop-filter: blur(4px);
+  }
+  .h-card:nth-child(1) { width: 220px; top: 0; left: 40px; transform: rotate(-3deg); }
+  .h-card:nth-child(2) { width: 260px; top: 80px; left: 0; transform: rotate(1.5deg); background: rgba(245,240,232,0.09); }
+  .h-card:nth-child(3) { width: 200px; top: 180px; left: 60px; transform: rotate(-1deg); }
+  .h-card-label {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .h-card-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--cream); line-height: 1.4;
+  }
+  .h-card-sub {
+    font-size: 0.75rem; color: rgba(245,240,232,0.5); margin-top: 0.25rem;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--dark);
+    padding: 2rem 5rem;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 700; color: var(--gold);
+    display: block; line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(245,240,232,0.5); margin-top: 0.4rem;
+    display: block;
+  }
+
+  /* SECTION COMMON */
+  .section { padding: 6rem 5rem; }
+  .section-header { margin-bottom: 3.5rem; }
+  .section-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 700;
+    color: var(--dark); line-height: 1.15;
+  }
+  .section-title em { font-style: italic; color: var(--olive); }
+
+  /* MENU SECTION */
+  .menu-section { background: var(--cream); }
+  .menu-tabs {
+    display: flex; gap: 0; margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(61,74,42,0.15);
+  }
+  .tab {
+    padding: 0.75rem 1.5rem; border: none; background: none;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+    font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab.active { color: var(--olive); border-bottom-color: var(--olive); font-weight: 500; }
+  .tab:hover:not(.active) { color: var(--dark); }
+  .menu-panel { display: none; }
+  .menu-panel.active { display: block; }
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .menu-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(61,74,42,0.1);
+    border-radius: 4px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .menu-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .menu-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700; color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+  .menu-card-desc {
+    font-size: 0.83rem; line-height: 1.6; color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .menu-card-serves {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .menu-tag {
+    display: inline-block; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; background: rgba(61,74,42,0.08);
+    color: var(--olive); padding: 0.2rem 0.6rem; border-radius: 2px;
+    margin-right: 0.4rem; margin-bottom: 0.4rem;
+  }
+
+  /* PERNILES TABLE */
+  .perniles-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .pernil-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(61,74,42,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .pernil-header {
+    background: var(--olive); padding: 1rem 1.5rem;
+  }
+  .pernil-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; color: var(--cream); font-weight: 700;
+  }
+  .pernil-subtitle {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(245,240,232,0.55); margin-top: 0.2rem;
+  }
+  .pernil-body { padding: 1.2rem 1.5rem; }
+  .pernil-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(61,74,42,0.07);
+    font-size: 0.83rem;
+  }
+  .pernil-row:last-child { border-bottom: none; }
+  .pernil-range { color: var(--text-muted); }
+  .pernil-panes { font-weight: 500; color: var(--dark); }
+  .sauces-note {
+    margin-top: 1rem; padding: 1rem;
+    background: rgba(200,169,110,0.1);
+    border-radius: 4px;
+    border-left: 3px solid var(--gold);
+  }
+  .sauces-title {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .sauces-list {
+    font-size: 0.8rem; color: var(--text-muted); line-height: 1.8;
+  }
+
+  /* QUESOS */
+  .quesos-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(200,169,110,0.3);
+    border-radius: 4px;
+    padding: 2rem;
+    max-width: 600px;
+  }
+  .quesos-subtitle {
+    font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+  .quesos-sizes {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+  }
+  .quesos-size {
+    background: var(--cream);
+    border: 1px solid rgba(61,74,42,0.15);
+    border-radius: 3px; padding: 0.5rem 1rem;
+    font-size: 0.8rem; color: var(--olive); font-weight: 500;
+  }
+  .quesos-content {
+    font-size: 0.83rem; line-height: 1.9; color: var(--text-muted);
+  }
+
+  /* REVIEWS */
+  .reviews-section { background: var(--dark); }
+  .reviews-section .section-title { color: var(--cream); }
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .review-card {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,169,110,0.15);
+    border-radius: 4px; padding: 1.5rem;
+  }
+  .review-stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .review-text {
+    font-size: 0.88rem; line-height: 1.75;
+    color: rgba(245,240,232,0.78); font-style: italic;
+    margin-bottom: 1.25rem;
+    font-family: 'Playfair Display', serif;
+  }
+  .review-author { font-size: 0.78rem; font-weight: 500; color: var(--gold); }
+  .review-meta { font-size: 0.72rem; color: rgba(245,240,232,0.35); margin-top: 0.15rem; }
+  .rating-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 2px; padding: 0.5rem 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: var(--gold); font-weight: 700;
+    margin-bottom: 2.5rem;
+  }
+  .rating-badge span { font-size: 0.75rem; color: rgba(245,240,232,0.5); font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+  /* CONTACT / CTA */
+  .cta-section { background: var(--olive); padding: 6rem 5rem; text-align: center; }
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); color: var(--cream);
+    margin-bottom: 1rem;
+  }
+  .cta-title em { color: var(--light-gold); font-style: italic; }
+  .cta-sub {
+    font-size: 1rem; color: rgba(245,240,232,0.65); margin-bottom: 2.5rem;
+    max-width: 50ch; margin-left: auto; margin-right: auto;
+  }
+  .cta-contact {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(200,169,110,0.2);
+  }
+  .contact-item { text-align: center; }
+  .contact-label {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); display: block; margin-bottom: 0.4rem;
+  }
+  .contact-val {
+    font-size: 0.95rem; color: var(--cream);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); padding: 2rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(200,169,110,0.1);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif; font-size: 1rem;
+    color: rgba(245,240,232,0.4);
+  }
+  .footer-note { font-size: 0.75rem; color: rgba(245,240,232,0.25); }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .hero-text { padding: 3rem 2rem; }
+    .section { padding: 4rem 1.5rem; }
+    .stats-bar { grid-template-columns: 2fr 2fr; padding: 2rem 1.5rem; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; padding: 1.5rem; }
+    .cta-section { padding: 4rem 1.5rem; }
+    .cta-contact { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Primera Mazza</div>
+  <ul class="nav-links">
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#perniles">Perniles</a></li>
+    <li><a href="#reviews">Reseñas</a></li>
+    <li><a href="#contacto" class="nav-cta">Consultar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Catering · Béccar, Buenos Aires</p>
+    <h1 class="hero-title">Sabor que<br><em>no se olvida</em></h1>
+    <p class="hero-subtitle">Perniles, bondiola, pizzas y más. Bocados que van directo al corazón de tu evento, desde 6 hasta 120 personas.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-primary">Pedir cotización</a>
+      <a href="#menu" class="btn-outline">Ver menú</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="h-card">
+        <div class="h-card-label">Especialidad</div>
+        <div class="h-card-text">Pernil de Cerdo</div>
+        <div class="h-card-sub">Con 5 salsas artesanales</div>
+      </div>
+      <div class="h-card">
+        <div class="h-card-label">Destacado</div>
+        <div class="h-card-text">Bondiola a la Barbacoa</div>
+        <div class="h-card-sub">Bandeja desmenuzada · 6 a 120 panes</div>
+      </div>
+      <div class="h-card">
+        <div class="h-card-label">También</div>
+        <div class="h-card-text">Quesos & Fiambres</div>
+        <div class="h-card-sub">Pack para 20+ personas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">5.0</span>
+    <span class="stat-label">Calificación Google</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">20+</span>
+    <span class="stat-label">Reseñas</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">120</span>
+    <span class="stat-label">Personas máx.</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">5</span>
+    <span class="stat-label">Salsas artesanales</span>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="section menu-section" id="menu">
+  <div class="section-header">
+    <p class="section-eyebrow">Lo que ofrecemos</p>
+    <h2 class="section-title">Nuestro <em>menú completo</em></h2>
+  </div>
+  <div class="menu-tabs">
+    <button class="tab active" onclick="showTab('platos')">Platos</button>
+    <button class="tab" onclick="showTab('pizzas')">Pizzas</button>
+    <button class="tab" onclick="showTab('combos')">Combos</button>
+    <button class="tab" onclick="showTab('quesos')">Quesos & Fiambres</button>
+  </div>
+
+  <div class="menu-panel active" id="tab-platos">
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-card-name">Goulash con Spaetzle</div>
+        <div class="menu-card-desc">Guiso húngaro en su punto justo, acompañado de spätzle casero. Plato contundente y reconfortante.</div>
+        <div class="menu-card-serves">Para 2 personas</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-name">Ribs BBQ con Zanahorias Caramelizadas</div>
+        <div class="menu-card-desc">Costillas tiernas en salsa barbacoa, con zanahorias caramelizadas abundantes como guarnición.</div>
+        <div class="menu-card-serves">Para 1/2 personas</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-name">Bondiola a la Barbacoa</div>
+        <div class="menu-card-desc">Bandeja desmenuzada con salsas a elección: cebolla caramelizada, mayonesa de albahaca, honey mustard y criolla.</div>
+        <div class="menu-card-serves">Para 6/7 a 120 panes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="tab-pizzas">
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-card-name">Pack Mozzarella x2</div>
+        <div class="menu-card-desc">Dos pizzas completas con las mejores combinaciones disponibles en el pack.</div>
+        <div>
+          <span class="menu-tag">Jamón</span>
+          <span class="menu-tag">Jamón y verdeo</span>
+          <span class="menu-tag">Caramelizada</span>
+          <span class="menu-tag">Fugazzeta</span>
+          <span class="menu-tag">Cuatro quesos</span>
+          <span class="menu-tag">Provolone</span>
+          <span class="menu-tag">Panceta y cheddar</span>
+          <span class="menu-tag">Vegetales asados</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="tab-combos">
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-card-name">Combo Clásico</div>
+        <div class="menu-card-desc">10 de mozzarella. El combo más sencillo para grupos pequeños.</div>
+        <div class="menu-card-serves">Pack básico</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-name">Combo Mix</div>
+        <div class="menu-card-desc">4 de mozzarella, 2 de jamón y 2 de caramelizada. Variedad asegurada.</div>
+        <div class="menu-card-serves">Pack variado</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="tab-quesos">
+    <div class="quesos-card">
+      <div class="menu-card-name" style="margin-bottom: 0.75rem;">Tabla de Quesos y Fiambres</div>
+      <div class="quesos-subtitle">
+        Incluye: Roquefort, tybo, brie, salame, jamón crudo, jamón natural, bondiola, lomo harenado, leber, nueces y aceitunas. <strong>Incluye panes saborizados.</strong>
+      </div>
+      <div class="quesos-sizes">
+        <div class="quesos-size">Comen 3 / Pican 6</div>
+        <div class="quesos-size">Comen 4 / Pican 8</div>
+        <div class="quesos-size">Comen 6 / Pican 12</div>
+        <div class="quesos-size">Comen 10 / Pican 16</div>
+        <div class="quesos-size">+20 personas</div>
+      </div>
+      <div class="quesos-content">
+        Acompañá tu picada junto con nuestros perniles y bandejas de carne. Consultar zonas de envío.<br>
+        <span style="color: var(--gold); font-size: 0.75rem;">48 horas de anticipación.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERNILES -->
+<section class="section" id="perniles" style="background: var(--warm-white);">
+  <div class="section-header">
+    <p class="section-eyebrow">La estrella del evento</p>
+    <h2 class="section-title">Nuestros <em>Perniles</em></h2>
+  </div>
+  <div class="perniles-grid">
+    <div class="pernil-card">
+      <div class="pernil-header">
+        <div class="pernil-title">Pernil de Cerdo</div>
+        <div class="pernil-subtitle">Bandejas desmenuzadas</div>
+      </div>
+      <div class="pernil-body">
+        <div class="pernil-row"><span class="pernil-range">Para 6/7 personas</span><span class="pernil-panes">~20 panes</span></div>
+        <div class="pernil-row"><span class="pernil-range">Para 12/15 personas</span><span class="pernil-panes">~50 panes</span></div>
+        <div class="pernil-row"><span class="pernil-range">Para 20/30 personas</span><span class="pernil-panes">~80 panes</span></div>
+        <div class="pernil-row"><span class="pernil-range">Para 30 personas</span><span class="pernil-panes">~120 panes</span></div>
+        <div class="sauces-note">
+          <div class="sauces-title">Salsas incluidas (a elegir)</div>
+          <div class="sauces-list">Salsa criolla · Mayonesa y albahaca<br>Cebolla caramelizada · Yogo & ciboulette</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pernil-card">
+      <div class="pernil-header" style="background: #2A3A1E;">
+        <div class="pernil-title">Pernil de Ternera</div>
+        <div class="pernil-subtitle">Bandejas desmenuzadas</div>
+      </div>
+      <div class="pernil-body">
+        <div class="pernil-row"><span class="pernil-range">Para 6/7 personas</span><span class="pernil-panes">~20 panes</span></div>
+        <div style="padding: 0.8rem 0; font-size: 0.8rem; color: var(--text-muted);">Consultar disponibilidad para cantidades mayores.</div>
+        <div class="sauces-note">
+          <div class="sauces-title">Servicio completo</div>
+          <div class="sauces-list">Panes incluidos · Salsas artesanales · Atención personalizada</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pernil-card">
+      <div class="pernil-header" style="background: var(--dark);">
+        <div class="pernil-title">Pernil de Cerdo</div>
+        <div class="pernil-subtitle">Para 10/15 – 50 panes · 12/30 – 120 panes</div>
+      </div>
+      <div class="pernil-body">
+        <div class="pernil-row"><span class="pernil-range">Para 10/15 personas</span><span class="pernil-panes">~50 panes</span></div>
+        <div class="pernil-row"><span class="pernil-range">Para 12/30 personas</span><span class="pernil-panes">~120 panes</span></div>
+        <div class="sauces-note">
+          <div class="sauces-title">5 salsas incluidas</div>
+          <div class="sauces-list">Salsa criolla · Mayonesa y albahaca · Cebolla caramelizada · Yogo & ciboulette</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section reviews-section" id="reviews">
+  <div class="section-header">
+    <div class="rating-badge">5.0 <span>· 20 reseñas en Google</span></div>
+    <p class="section-eyebrow">Lo que dicen</p>
+    <h2 class="section-title" style="color: var(--cream);">Nuestros <em style="color: var(--light-gold);">clientes hablan</em></h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Gran servicio y mejor producto. Llevo años llamándolos, tanto el pernil entero como las bandejas de carne desmenuzada son espectaculares."</p>
+      <div class="review-author">Federico Zulberti</div>
+      <div class="review-meta">Guía Local · hace 7 meses</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Pedí el pernil y la carne desmenuzada para un evento de 40 personas. Fue un éxito total, desde las salsas hasta el pan. ¡Altamente recomendado!"</p>
+      <div class="review-author">Enrique Arguello</div>
+      <div class="review-meta">hace 7 meses</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"¡Todo estuvo fantástico! El servicio y las sugerencias fueron excelentes. ¡Los sándwiches de carne desmenuzada estuvieron increíbles!"</p>
+      <div class="review-author">Maite Gondra</div>
+      <div class="review-meta">hace 7 meses</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACTO -->
+<section class="cta-section" id="contacto">
+  <h2 class="cta-title">¿Tenés un evento <em>en mente?</em></h2>
+  <p class="cta-sub">Consultanos sin compromiso. Te ayudamos a elegir la mejor opción para tu cantidad de personas.</p>
+  <a href="tel:01115240642044" class="btn-primary" style="font-size: 1rem; padding: 1rem 2.5rem;">Llamar ahora</a>
+  <div class="cta-contact">
+    <div class="contact-item">
+      <span class="contact-label">Teléfono</span>
+      <span class="contact-val">011 15-2406-4204</span>
+    </div>
+    <div class="contact-item">
+      <span class="contact-label">Dirección</span>
+      <span class="contact-val">España 176, Béccar, Pcia. Buenos Aires</span>
+    </div>
+    <div class="contact-item">
+      <span class="contact-label">Calificación</span>
+      <span class="contact-val">★ 5.0 en Google Maps</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Primera Mazza</div>
+  <div class="footer-note">Catering · Béccar, Buenos Aires</div>
+</footer>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
